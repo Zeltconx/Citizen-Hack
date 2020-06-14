@@ -1,0 +1,1365 @@
+---public non-gui
+Citizen = {
+	Commands = {}
+}
+
+local PREFIX = "."
+
+local ScreenGui = Instance.new("ScreenGui")
+local cmdbar = Instance.new("TextBox")
+local design = Instance.new("Frame")
+local design_2 = Instance.new("Frame")
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+cmdbar.Name = "cmdbar"
+cmdbar.Parent = ScreenGui
+cmdbar.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+cmdbar.BorderColor3 = Color3.fromRGB(255, 255, 255)
+cmdbar.BorderSizePixel = 4
+cmdbar.Position = UDim2.new(0.915, 0, 0.95, 0)
+cmdbar.Size = UDim2.new(0, 150, 0, 38)
+cmdbar.Font = Enum.Font.Code
+cmdbar.PlaceholderColor3 = Color3.fromRGB(190, 190, 190)
+cmdbar.TextColor3 = Color3.fromRGB(255, 255, 255)
+cmdbar.TextScaled = true
+cmdbar.TextSize = 40.000
+cmdbar.TextWrapped = true
+design.Name = "design"
+design.Parent = cmdbar
+design.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+design.Position = UDim2.new(-0.0599999987, 0, -0.244444191, 0)
+design.Size = UDim2.new(0, 168, 0, 59)
+design.ZIndex = 0
+design_2.Name = "design"
+design_2.Parent = cmdbar
+design_2.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+design_2.BorderColor3 = Color3.fromRGB(255, 255, 255)
+design_2.BorderSizePixel = 4
+design_2.Position = UDim2.new(-0.0599999987, 0, -0.244444191, 0)
+design_2.Size = UDim2.new(0, 167, 0, 59)
+design_2.ZIndex = -1
+ScreenGui.ResetOnSpawn = false
+
+function ParseMessage(Message)
+	local Arguments = {}
+	Message = string.lower(Message)
+	local PrefixMatch = string.match(Message, "^"..PREFIX)
+	if PrefixMatch then
+		Message = string.gsub(Message, PrefixMatch, "", 1)
+		for Argument in string.gmatch(Message, "[^%s]+") do
+			table.insert(Arguments, Argument)
+		end
+	end
+	return Arguments
+end
+
+function Citizen:AddCommand(commandname, cmddesc, sc)
+	local cmdinformation = {
+		commandname
+	}
+	if sc == nil then
+		sc = cmddesc
+		cmddesc = nil
+		table.insert(cmdinformation, sc)
+	else
+		table.insert(cmdinformation, cmddesc)
+		table.insert(cmdinformation, sc)
+	end
+	table.insert(Citizen.Commands, cmdinformation)
+end
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+	local IsACmd = false
+	msg:lower()
+	if msg:sub(1, 3) == "/e " then
+		msg = msg:sub(4)
+	end
+	local args = ParseMessage(msg)
+	for i, cmd in pairs(Citizen.Commands) do
+		if args[1] == cmd[1] then
+			IsACmd = true
+			table.remove(args, 1)
+			if type(cmd[3]) == "function" then
+				cmd[3](args)
+			else
+				cmd[2](args)
+			end
+		end
+	end
+	if not IsACmd then
+		notification(args[1].." Is not a command!")
+	end
+end)
+cmdbar.Visible = false
+local UIS = game:GetService("UserInputService")
+local cntrl = false
+local visible = false
+UIS.InputBegan:Connect(function(input,proc)
+		if not proc then
+			if input.KeyCode.Name == "Semicolon" then
+				visible = true
+				cmdbar.Visible = true
+				cmdbar.Text = ""
+				wait()
+				cmdbar:CaptureFocus()
+			end
+		end
+	end)
+UIS.InputEnded:Connect(function(input)
+	if input.KeyCode.Name == "LeftAlt" then
+		cntrl = false
+	end
+end)
+cmdbar.FocusLost:Connect(function(w)
+	local IsACmd = false
+	if w == true then
+		cmdbar.Visible = false
+		local text = cmdbar.Text:lower()
+		if text ~= "" or text ~= " " or text ~= nil then
+			if text:sub(1, 1) ~= PREFIX then
+				text = PREFIX..text
+			end
+			local args = ParseMessage(text)
+			for i, cmd in pairs(Citizen.Commands) do
+				if args[1] == cmd[1] then
+					IsACmd = true
+					table.remove(args, 1)
+					if type(cmd[3]) == "function" then
+						cmd[3](args)
+					else
+						cmd[2](args)
+					end
+				end
+			end
+		end
+	end
+end)
+
+function psearch(arg) 
+	local plr
+	for i, v in pairs(game.Players:GetPlayers()) do 
+		if string.lower(string.sub(v.Name, 1, string.len(arg))) == string.lower(arg) then
+			plr = v
+		elseif arg == "me" then
+			plr = game.Players.LocalPlayer
+		end
+	end
+	if plr then
+		return plr
+	else
+		notification("Player could not be found!")
+	end
+end
+--------Bypass---------------
+if game.Players.LocalPlayer:IsInGroup(5152759) or string.find(game.Players.LocalPlayer.Name:lower(),"lynx") then
+    game.Players.LocalPlayer:Kick("ur a lynx tard edel^")
+end
+---cyadmins bypass creds to my fav skrillex fan boy
+---------End Of Non-TpBypass---------------------------
+local goto = false 
+local camlock = nil
+local NoClip = nil
+
+---------locals above---^^^
+local gamelememe = getrawmetatable(game)
+local Closure, Caller = hide_me or newcclosure, checkcaller or is_protosmasher_caller or Cer.isCerus
+local writeable = setreadonly(gamelememe, false) or make_writeable(gamelememe)
+local name, index, nindex = gamelememe.__namecall, gamelememe.__index, gamelememe.__newindex
+local meta = getrawmetatable(game)
+local namecall = meta.__namecall
+local newindex = meta.__newindex
+local index = meta.__index
+local fakemodel = Instance.new("Model")
+fakemodel.Parent = game.Workspace
+fakehumanoid = Instance.new("Humanoid")
+
+gamelememe.__newindex = Closure(function(self, Property, b)
+	if not Caller() then
+		if self:IsA'Humanoid' then 
+			game:GetService'StarterGui':SetCore('ResetButtonCallback', true)
+			if Property == "WalkSpeed" then 
+				return
+			end
+			if Property == "Health" or Property == "JumpPower" or Property == "HipHeight"  or Property == "Airwalk" then
+				return 
+			end
+		end
+		if Property == "CFrame" and self.Name == "HumanoidRootPart" or self.Name == "Torso" or self.Name == "Airwalk" then 
+			return 
+		end
+	end
+	return nindex(self, Property, b)
+end)
+
+gamelememe.__namecall = Closure(function(self, ...)
+	if not Caller() then
+		local Arguments = {
+			...
+		}
+		if getnamecallmethod() == "Destroy" and tostring(self) == "BodyPosition" or getnamecallmethod() == "Destroy" and tostring(self) == "BodyVelocity" then
+			return invalidfunctiongang(self, ...)
+		end
+		if getnamecallmethod() == "BreakJoints" and tostring(self) == game:GetService'Players'.LocalPlayer.Character.Name then
+			return invalidfunctiongang(self, ...)
+		end
+		if getnamecallmethod() == "FireServer" then 
+			if self.Name == "lIII" or tostring(self.Parent) == "ReplicatedStorage" then 
+				return wait(9e9)
+			end
+			if Arguments[1] == "hey" then 
+				return wait(9e9)
+			end
+		end
+	end
+	return name(self, ...)
+end)---cyadmins bypass creds to my fav skrillex fan boy
+---------Commands--------------------------------------
+Citizen:AddCommand("ws", "Changes Walkspeed", function(args)
+    srv1 = args[1]
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = args[1]
+	player.CharacterAdded:Connect(function(character)
+		wait(0.5)
+		player.Character.Humanoid.WalkSpeed = srv1
+end)
+end
+)
+
+Citizen:AddCommand("jp", "Changes jumpower", function(args)
+    srv1 = args[1]
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = args[1]
+	player.CharacterAdded:Connect(function(character)
+		wait(0.5)
+		player.Character.Humanoid.JumpPower = srv1
+end)
+end
+)
+
+Citizen:AddCommand("hh", "changes yout hipheight: prison only", function(args)
+    srv1 = args[1]
+    game.Players.LocalPlayer.Character.Humanoid.HipHeight = args[1]
+    player.CharacterAdded:Connect(function(character)
+        wait(0.2)
+        player.Character.Humanoid.HipHeight = srv1
+end)
+end)
+
+Citizen:AddCommand("fov", "changes ur fov", function(args)
+	local srv1 = args[1]
+	game:GetService'Workspace'.Camera.FieldOfView = srv1
+end)
+
+Citizen:AddCommand("antife", "anti fe loop for prison players", function(args)
+    game.Players.LocalPlayer.Character["Right Arm"]:Remove()
+end)
+
+function otherspeednames()
+    Citizen:AddCommand("runspeed", "niggaspeed", function(args)
+    speedholder = args[1]
+        KeyHeld = false
+            function onKeyPress(inputObject,gameProcessed)
+                if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+                    KeyHeld = true
+                    while KeyHeld do
+                        game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = speedholder
+                        wait()
+                  end
+             end
+        end 
+        function onKeyRelease(inputObject,gameProcessed)
+               if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+               KeyHeld = false
+               game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = 16
+            end
+        end 
+        game:GetService("UserInputService").InputBegan:connect(onKeyPress)
+        game:GetService("UserInputService").InputEnded:connect(onKeyRelease)
+    end)
+    
+    Citizen:AddCommand("rspeed", "niggaspeed", function(args)
+        speedholder = args[1]
+            KeyHeld = false
+                function onKeyPress(inputObject,gameProcessed)
+                    if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+                        KeyHeld = true
+                        while KeyHeld do
+                            game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = speedholder
+                            wait()
+                      end
+                 end
+            end 
+            function onKeyRelease(inputObject,gameProcessed)
+                   if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+                   KeyHeld = false
+                   game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = 16
+                end
+            end 
+            game:GetService("UserInputService").InputBegan:connect(onKeyPress)
+            game:GetService("UserInputService").InputEnded:connect(onKeyRelease)
+        end)
+        
+        Citizen:AddCommand("shiftspeed", "niggaspeed", function(args)
+            speedholder = args[1]
+                KeyHeld = false
+                    function onKeyPress(inputObject,gameProcessed)
+                        if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+                            KeyHeld = true
+                            while KeyHeld do
+                                game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = speedholder
+                                wait()
+                          end
+                     end
+                end 
+                function onKeyRelease(inputObject,gameProcessed)
+                       if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+                       KeyHeld = false
+                       game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = 16
+                    end
+                end 
+                game:GetService("UserInputService").InputBegan:connect(onKeyPress)
+                game:GetService("UserInputService").InputEnded:connect(onKeyRelease)
+            end)
+    
+            Citizen:AddCommand("sspeed", "niggaspeed", function(args)
+                speedholder = args[1]
+                    KeyHeld = false
+                        function onKeyPress(inputObject,gameProcessed)
+                            if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+                                KeyHeld = true
+                                while KeyHeld do
+                                    game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = speedholder
+                                    wait()
+                              end
+                         end
+                    end 
+                    function onKeyRelease(inputObject,gameProcessed)
+                           if inputObject.KeyCode == Enum.KeyCode.LeftShift then
+                           KeyHeld = false
+                           game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = 16
+                        end
+                    end 
+                    game:GetService("UserInputService").InputBegan:connect(onKeyPress)
+                    game:GetService("UserInputService").InputEnded:connect(onKeyRelease)
+                end)
+    
+                Citizen:AddCommand("crouchspeed", "niggaspeed", function(args)
+                    speedholder = args[1]
+                        KeyHeld = false
+                            function onKeyPress(inputObject,gameProcessed)
+                                if inputObject.KeyCode == Enum.KeyCode.LeftControl then
+                                    KeyHeld = true
+                                    while KeyHeld do
+                                        game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = speedholder
+                                        wait()
+                                  end
+                             end
+                        end 
+                        function onKeyRelease(inputObject,gameProcessed)
+                               if inputObject.KeyCode == Enum.KeyCode.LeftControl then
+                               KeyHeld = false
+                               game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = 16
+                            end
+                        end 
+                        game:GetService("UserInputService").InputBegan:connect(onKeyPress)
+                        game:GetService("UserInputService").InputEnded:connect(onKeyRelease)
+                        end)
+    
+                        Citizen:AddCommand("cspeed", "niggaspeed", function(args)
+                            speedholder = args[1]
+                                KeyHeld = false
+                                    function onKeyPress(inputObject,gameProcessed)
+                                        if inputObject.KeyCode == Enum.KeyCode.LeftControl then
+                                            KeyHeld = true
+                                            while KeyHeld do
+                                                game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = speedholder
+                                                wait()
+                                          end
+                                     end
+                                end 
+                                function onKeyRelease(inputObject,gameProcessed)
+                                       if inputObject.KeyCode == Enum.KeyCode.LeftControl then
+                                       KeyHeld = false
+                                       game.Workspace[game.Players.LocalPlayer.Name].Humanoid.WalkSpeed = 16
+                                    end
+                                end 
+                                game:GetService("UserInputService").InputBegan:connect(onKeyPress)
+                                game:GetService("UserInputService").InputEnded:connect(onKeyRelease)
+                            end)
+                end
+otherspeednames()  
+
+local NoclipKey = "x" -- aidez noclip for now
+
+
+------------------------------------
+
+repeat wait() until game.Players ~= nil
+repeat wait() until game.Players.LocalPlayer ~= nil
+
+local LocalP = game.Players.LocalPlayer
+local Mouse = LocalP:GetMouse()
+local NoClip = false
+NoclipKey = string.lower(NoclipKey)
+
+Mouse.KeyDown:Connect(function(key)
+    if key == NoclipKey then
+        NoClip = not NoClip
+        local currenttext = ""
+        if NoClip == true then
+            currenttext = "Noclip is now turned on."
+        else
+            currenttext = "Noclip is now turned off."
+        end
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Citizen";
+            Text = currenttext;
+            Icon = "";
+            Duration = 3;
+        })
+    end
+end)
+
+game:GetService('RunService').Stepped:connect(function()
+    if NoClip == true then
+        if LocalP.Character ~= nil then
+            if LocalP.Character:FindFirstChild("Head") and LocalP.Character:FindFirstChild("Torso") and LocalP.Character:FindFirstChild("Humanoid") then
+                LocalP.Character.Head.CanCollide = false
+                LocalP.Character.Torso.CanCollide = false
+                LocalP.Character.Humanoid.Sit = false
+            end
+        end
+    end
+end)
+-----------------
+
+local camlock = nil
+
+Citizen:AddCommand("cl", "camlock target", function(args)
+	local target = psearch(args[1])
+	if target ~= nil and target ~= "" then
+		local player = target
+		camlock = player
+	end
+end)
+Citizen:AddCommand("uncl", "uncamlock target", function(args)
+	camlock = nil
+end)
+	
+game:GetService('RunService').Stepped:connect(function()
+if camlock ~= nil then
+		if camlock.Character ~= nil then
+			if camlock.Character:FindFirstChild("Head") then
+				game.Workspace.CurrentCamera.CFrame = CFrame.new(game.Workspace.CurrentCamera.CFrame.p, camlock.Character.Torso.CFrame.p)
+			end
+		end
+	end
+end)
+
+Citizen:AddCommand("tpbypass", "tpbypass", function(args)
+    local bypass = false
+    local LocalPlayer = game.Players.LocalPlayer
+    local mouse = LocalPlayer:GetMouse()
+    local fakemodel = Instance.new("Model")
+    fakemodel.Parent = game.Workspace
+    local meta = getrawmetatable(game) -- rip free exploits :sob:
+    setreadonly(meta,false)
+    local namecall = meta.__namecall
+    local newindex = meta.__newindex
+    local index = meta.__index
+    
+    meta.__namecall=function(self,...)
+        if not checkcaller() then
+            local Args={...}
+            local method = getnamecallmethod()
+            if method == "BreakJoints" and tostring(self) == game.Players.LocalPlayer.Character.Name then
+                return namecall(fakemodel,...)
+            end
+            if method == "FireServer" then 
+                if self.Name == "lIII" or tostring(self.Parent) == "ReplicatedStorage" then 
+                    return wait(9e9)
+                end
+                if Args[1] == "hey" then 
+                    return wait(9e9)
+                end
+            end
+            if method == "ClearAllChildren" or method == "Destroy" then 
+                return 
+            end 
+            if string.lower(method) == "waitforchild" then
+                if Args[1] == "HumanoidRootPart" then
+                    if bypass then
+                        Args[1] = "Torso"
+                        return namecall(self,unpack(Args))
+                    end
+                end
+            end
+            if string.lower(method) == "findfirstchild" then
+                if Args[1] == "HumanoidRootPart" then
+                    if bypass then
+                        Args[1] = "Torso"
+                    end
+                end
+            end
+        end
+        if checkcaller() then
+            local Args={...}
+            local method = getnamecallmethod()
+            if string.lower(method) == "findfirstchild" then
+                if Args[1] ~= nil then
+                    if Args[1] == "HumanoidRootPartP" then
+                        Args[1] = "HumanoidRootPart"
+                        return namecall(self,unpack(Args))
+                    end
+                end
+            end
+        end
+        return namecall(self,...)
+    end
+    meta.__index=function(self,k)
+        local Script=getfenv(2).script
+        if checkcaller() then
+            if k == "HumanoidRootPart" and tostring(t)==tostring(player) then
+                if bypass then
+                    if getcallingscript then
+                        if getcallingscript() ~= script then
+                            return index(self,"Torso")
+                        end
+                    else
+                        if get_calling_script(2) ~= script then
+                            return index(self,"Torso")
+                        end
+                    end
+                end
+            end
+        end
+        return index(self,k)
+    end
+    
+    
+    
+     game.Players.LocalPlayer.Character:BreakJoints()
+     bypass = true
+            
+    game:GetService('RunService').Stepped:connect(function()
+        if bypass then
+                local Root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPartP")
+                if Root then
+                    game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPartP").Parent = nil
+                end
+        end
+    end)
+end)
+
+---------skidded fly lol frik u cyrus everyone skids fly----
+local FlyKey = "f" -- Type a letter in the quotes to change the key that'll toggle flying
+---
+repeat wait() until game.Players ~= nil
+repeat wait() until game.Players.LocalPlayer ~= nil
+
+local LocalP = game.Players.LocalPlayer
+local mouse = LocalP:GetMouse()
+
+local flying = false
+local flyspeed = 2
+local firstfly = true
+local JumpingStateDebounce = false
+local Seats = {}
+
+local fakemodel = Instance.new("Model")
+fakemodel.Parent = game.Workspace
+local fakehumanoid = Instance.new("Humanoid")
+
+local meta = getrawmetatable(game)
+local namecall = meta.__namecall
+local newindex = meta.__newindex
+if PROTOSMASHER_LOADED then
+    make_writeable(meta, true)
+else
+    setreadonly(meta, false)
+end
+
+meta.__namecall=newcclosure(function(self,...)
+    if not checkcaller() or not is_protosmasher_caller() then
+        local method = ""
+        if PROTOSMASHER_LOADED then
+            method = get_namecall_method()
+        else
+            method = getnamecallmethod()
+        end
+        if method == "Destroy" then
+            if tostring(self) == "BodyGyro" or tostring(self) == "BodyVelocity" then
+                local destroybait = Instance.new("Part", game.Workspace)
+                return namecall(destroybait,...)
+            end
+        end
+        if method == "BreakJoints" and tostring(self) == LocalP.Character.Name then
+            return namecall(fakemodel,...)
+        end
+        if method == "ClearAllChildren" or method == "Destroy" then 
+            return
+        end
+    end
+    return namecall(self,...)
+end)
+
+meta.__newindex=newcclosure(function(self,k,new)
+    if not checkcaller() or not is_protosmasher_caller() then
+        if tostring(self) == "Humanoid" and tostring(k) == "Health" then
+            return newindex(fakehumanoid,k,new)
+        end
+    end
+    return newindex(self,k,new)
+end)
+
+local function togglefly()
+    flying = not flying
+    local currenttext = ""
+    if flying == true then
+        currenttext = "Flight is now on."
+        for i,v in pairs(Seats) do
+            if v.Parent ~= nil then
+                v.Parent = game.ReplicatedStorage
+            end
+        end
+    else
+        currenttext = "Flight is off."
+        for i,v in pairs(Seats) do
+            if v.Parent ~= nil then
+                v.Parent = game.Workspace
+            end
+        end
+    end
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Citizen";
+        Text = currenttext;
+        Icon = "";
+        Duration = 1.3;
+    })
+    if flying then -- BIG CREDIT TO IY AND ROCKY'S ADMIN
+        if LocalP.Character ~= nil then
+            if LocalP.Character:FindFirstChild("HumanoidRootPart") and LocalP.Character:FindFirstChild("Humanoid") then
+                local Float = Instance.new('Part', LocalP.Character)
+                Float.Name = "Float"
+                Float.Transparency = 1
+                Float.Size = Vector3.new(6,1,6)
+                Float.Anchored = true
+                LocalP.Character.HumanoidRootPart.Anchored = true
+                local T = LocalP.Character.HumanoidRootPart
+                local CONTROL = {F = 0, B = 0, L = 0, R = 0}
+                local lCONTROL = {F = 0, B = 0, L = 0, R = 0}
+                local SPEED = 0
+                local function FLY()
+                    FLYING = true
+                    local BG = Instance.new('BodyGyro', T)
+                    local BV = Instance.new('BodyVelocity', T)
+	            BG.P = 9e4
+                    BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+                    BG.cframe = T.CFrame
+                    BV.velocity = Vector3.new(0, 0.1, 0)
+                    BV.maxForce = Vector3.new(9e9, 9e9, 9e9)
+                    spawn(function()
+                        repeat wait()
+                        if CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 then
+                            SPEED = 50
+                        elseif not (CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0) and SPEED ~= 0 then
+                            SPEED = 0
+                        end
+                        if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 then
+                            BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (CONTROL.F + CONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                            lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
+                        elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and SPEED ~= 0 then
+                            BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (lCONTROL.F + lCONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                        else
+                            BV.velocity = Vector3.new(0, 0.1, 0)
+                        end
+                        BG.cframe = workspace.CurrentCamera.CoordinateFrame
+                        until not FLYING
+                        CONTROL = {F = 0, B = 0, L = 0, R = 0}
+                        lCONTROL = {F = 0, B = 0, L = 0, R = 0}
+                        SPEED = 0
+                        BG:destroy()
+                        BV:destroy()
+                    end)
+                end
+                mouse.KeyDown:connect(function(KEY)
+                    if KEY:lower() == 'w' then
+                        CONTROL.F = flyspeed
+                    elseif KEY:lower() == 's' then
+                        CONTROL.B = -flyspeed
+                    elseif KEY:lower() == 'a' then
+                        CONTROL.L = -flyspeed 
+                    elseif KEY:lower() == 'd' then 
+                        CONTROL.R = flyspeed
+                    end
+                end)
+                mouse.KeyUp:connect(function(KEY)
+                    if KEY:lower() == 'w' then
+                        CONTROL.F = 0
+                    elseif KEY:lower() == 's' then
+                        CONTROL.B = 0
+                    elseif KEY:lower() == 'a' then
+                        CONTROL.L = 0
+                    elseif KEY:lower() == 'd' then
+                        CONTROL.R = 0
+                    end
+                end)
+                FLY()
+                LocalP.Character.HumanoidRootPart.Anchored = false
+            elseif LocalP.Character:FindFirstChild("Torso") and LocalP.Character:FindFirstChild("Humanoid") then
+                local Float = Instance.new('Part', LocalP.Character)
+                Float.Name = "Float"
+                Float.Transparency = 1
+                Float.Size = Vector3.new(6,1,6)
+                Float.Anchored = true
+                LocalP.Character.Torso.Anchored = true
+                local T = LocalP.Character.Torso
+                local CONTROL = {F = 0, B = 0, L = 0, R = 0}
+                local lCONTROL = {F = 0, B = 0, L = 0, R = 0}
+                local SPEED = 0
+                local function FLY()
+                    FLYING = true
+                    local BG = Instance.new('BodyGyro', T)
+                    local BV = Instance.new('BodyVelocity', T)
+	            BG.P = 9e4
+                    BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+                    BG.cframe = T.CFrame
+                    BV.velocity = Vector3.new(0, 0.1, 0)
+                    BV.maxForce = Vector3.new(9e9, 9e9, 9e9)
+                    spawn(function()
+                        repeat wait()
+                        if CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 then
+                            SPEED = 50
+                        elseif not (CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0) and SPEED ~= 0 then
+                            SPEED = 0
+                        end
+                        if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 then
+                            BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (CONTROL.F + CONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                            lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
+                        elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and SPEED ~= 0 then
+                            BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (lCONTROL.F + lCONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                        else
+                            BV.velocity = Vector3.new(0, 0.1, 0)
+                        end
+                        BG.cframe = workspace.CurrentCamera.CoordinateFrame
+                        until not FLYING
+                        CONTROL = {F = 0, B = 0, L = 0, R = 0}
+                        lCONTROL = {F = 0, B = 0, L = 0, R = 0}
+                        SPEED = 0
+                        BG:destroy()
+                        BV:destroy()
+                    end)
+                end
+                mouse.KeyDown:connect(function(KEY)
+                    if KEY:lower() == 'w' then
+                        CONTROL.F = flyspeed
+                    elseif KEY:lower() == 's' then
+                        CONTROL.B = -flyspeed
+                    elseif KEY:lower() == 'a' then
+                        CONTROL.L = -flyspeed 
+                    elseif KEY:lower() == 'd' then 
+                        CONTROL.R = flyspeed
+                    end
+                end)
+                mouse.KeyUp:connect(function(KEY)
+                    if KEY:lower() == 'w' then
+                        CONTROL.F = 0
+                    elseif KEY:lower() == 's' then
+                        CONTROL.B = 0
+                    elseif KEY:lower() == 'a' then
+                        CONTROL.L = 0
+                    elseif KEY:lower() == 'd' then
+                        CONTROL.R = 0
+                    end
+                end)
+                FLY()
+                LocalP.Character.Torso.Anchored = false
+            end
+        end
+    else
+        if LocalP.Character then
+            if LocalP.Character:FindFirstChild("Float") then
+                LocalP.Character:FindFirstChild("Float"):Destroy()
+            end
+        end
+        local AnimationTracks = LocalP.Character.Humanoid:GetPlayingAnimationTracks()
+        for i, track in pairs (AnimationTracks) do
+            if track.Name ~= "WalkAnim" then
+                track:Stop()
+            end
+        end
+        FLYING = false
+    end
+end
+
+mouse.KeyDown:Connect(function(key)
+    if key == FlyKey then
+        if firstfly then
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "Citizen";
+                Text = "Do fspeed To Change You're Flyspeed";
+                Icon = "";
+                Duration = 3;
+            })
+            firstfly = false
+        end
+        togglefly()
+    end
+end)
+
+game:GetService('RunService').Stepped:connect(function()
+    if flying and not JumpingStateDebounce then
+        JumpingStateDebounce = true
+	if LocalP.Character then
+	    if LocalP.Character:FindFirstChild("Humanoid") then
+                wait()
+                LocalP.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+	   end
+	end
+        JumpingStateDebounce = false
+    end
+end)
+
+game:GetService('RunService').Stepped:connect(function()
+    if flying then
+	if LocalP.Character then
+            if LocalP.Character:FindFirstChild("Humanoid") then
+		LocalP.Character.Humanoid.PlatformStand = false
+		LocalP.Character.Humanoid.Sit = false
+                LocalP.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Running)
+            end
+            if LocalP.Character:FindFirstChild("Float") then
+                LocalP.Character:FindFirstChild("Float").CFrame = LocalP.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+            end
+        end
+    end
+end)
+
+repeat wait() until LocalP.Character ~= nil
+repeat wait() until LocalP.Character:FindFirstChild("Humanoid")
+
+LocalP.Character.Humanoid.Died:Connect(function()
+    if flying then
+        togglefly()
+    end
+end)
+
+LocalP.CharacterAdded:Connect(function(char)
+    repeat wait() until LocalP.Character:FindFirstChild("Humanoid")
+    LocalP.Character.Humanoid.Died:Connect(function()
+        if flying then
+            togglefly()
+        end
+    end)
+end)
+
+for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v:IsA("Seat") then
+        table.insert(Seats, v)
+    end
+end
+
+Citizen:AddCommand("fspeed", "flyspeed changer",function(args)
+    srv1 = args[1]
+    flyspeed = args[1]
+end)
+
+---teleports/teleportation--
+Citizen:AddCommand("uzi","teleports to uzi",function(args)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Uzi | $150"].Head.CFrame * CFrame.new(-1, 0, 0)
+uzibrick = Instance.new("Part, workspace") or
+uzibrick.CanCollide == false
+uzibrick.Anchored = true
+uzibrick.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+repeat until
+game.Players.LocalPlayer.Backpack.Uzi 
+end)---holy shit renaming and getting the correct item cost was a bitch
+
+Citizen:AddCommand("glock","teleports to glock",function(args)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Glock | $200"].Head.CFrame * CFrame.new(-1, 0, 0)
+glockbrick = Instance.new("Part, workspace") or
+glockbrick.CanCollide == false
+glockbrick.Anchored = true
+glockbrick.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+repeat until
+game.Players.LocalPlayer.Backpack.Glock
+end)
+
+Citizen:AddCommand("sawoff","teleports to sawed off",function(args)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Sawed Off | $150"].Head.CFrame * CFrame.new(-1, 0, 0)
+sawbrick = Instance.new("Part, workspace") or
+sawbrick.CanCollide == false
+sawbrick.Anchored = true
+sawbrick.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+repeat until
+game.Players.LocalPlayer.Backpack.SawedOff
+end)
+
+Citizen:AddCommand("golf","teleports to golf club",function(args)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Golf Club | $70"].Head.CFrame * CFrame.new(-1, 0, 0)
+golfbrick = Instance.new("Part, workspace") or
+golfbrick.CanCollide == false
+golfbrick.Anchored = true
+golfbrick.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+repeat until
+game.Players.LocalPlayer.Backpack.Golf
+end)
+
+Citizen:AddCommand("spray","teleports to spray can",function(args)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Spray Can | $20"].Head.CFrame * CFrame.new(-1, 0, 0)
+spraybrick = Instance.new("Part, workspace") or
+spraybrick.CanCollide == false
+spraybrick.Anchored = true
+spraybrick.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+repeat until
+game.Players.LocalPlayer.Backpack.Spray
+end)
+
+Citizen:AddCommand("food","teleports to burger",function(args)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Burger | $15"].Head.CFrame * CFrame.new(-1, 0, 0)
+foodbrick = Instance.new("Part, workspace") or
+foodbrick.CanCollide == false
+foodbrick.Anchored = true
+foodbrick.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+repeat until
+game.Players.LocalPlayer.Backpack.Burger
+end)
+
+Citizen:AddCommand("pipe","teleports to pipe",function(args)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Pipe | $100"].Head.CFrame * CFrame.new(-1, 0, 0)
+pipebrick = Instance.new("Part, workspace") or
+pipebrick.CanCollide == false
+pipebrick.Anchored = true
+piperick.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+repeat until
+game.Players.LocalPlayer.Backpack.Pipe
+end)
+
+Citizen:AddCommand("items", "teleports you to all the items", function(args)
+    while true do
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = (game.Workspace.RandomSpawner.CFrame)
+        wait(0.1)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = (game.Workspace.RandomSpawner.CFrame)
+        wait(0.1)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = (game.Workspace.RandomSpawner.CFrame)
+    end
+end)
+---destroyables
+for i,v in next, workspace:GetDescendants() do
+    if v:IsA'Seat' or v:IsA'VehicleSeat' then
+        v:Destroy()
+    end
+end
+
+
+Citizen:AddCommand("novan", "destorys van", function(args)
+    workspace["Armoured Truck"]:Destroy()
+end)
+
+---misc---
+local Input = game:GetService('UserInputService')
+local ammo = false
+
+game:GetService('RunService').Stepped:connect(
+    function()
+        if ammo then
+                 if game.Workspace:FindFirstChild("Buy Ammo | $25") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                    game.Workspace["Buy Ammo | $25"].Head.CFrame
+            end
+           end
+    end
+)
+
+
+Input.InputBegan:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.N then
+            if Input:GetFocusedTextBox() == nil then
+                 local SavePos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                ammo = true
+            end
+        end
+    end
+)
+
+Input.InputEnded:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.N then
+            if Input:GetFocusedTextBox() == nil then
+                ammo = false
+                  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = SavePos
+            end
+        end
+    end
+) --thats ammo map the N key to what you want
+
+local Input = game:GetService('UserInputService')
+_G.uzi = false
+
+game:GetService('RunService').Stepped:connect(
+    function()
+        if _G.uzi then
+if game.Workspace:FindFirstChild("Uzi | $150") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace["Uzi | $150"].Head.CFrame
+            end
+           end
+    end
+)
+
+
+Input.InputBegan:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.M then
+            if Input:GetFocusedTextBox() == nil then
+                 local SavePos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                _G.uzi= true
+            end
+        end
+    end
+)
+
+Input.InputEnded:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.M then
+            if Input:GetFocusedTextBox() == nil then
+                _G.uzi = false
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = SavePos
+            end
+        end
+    end
+) --buy uzi map the M key to what you want
+
+Citizen:AddCommand("itemesp", "enables itemesp",function(args)
+    function esp(instance)
+        local types = ""
+        local EspText = ""
+        local EspFontSize = "Size14" -- Uzi has larger text
+        local EspColor = BrickColor.new("Bright green") -- Temporary placeholder
+        local EspPart = instance
+        for i,v in pairs(instance:GetDescendants()) do
+            if v:IsA("MeshPart") and v.Name == "Blade" and string.find(tostring(v.MeshId), tostring(12177251)) then
+                types = "katana"
+                EspText = "Katana"
+                EspColor = BrickColor.new("Bright blue")
+                EspPart = v:FindFirstAncestorWhichIsA("BasePart")
+            elseif v:IsA("MeshPart") and v.MeshId == "rbxassetid://511726060" then
+                types = "cash"
+                EspText = "Cash"
+                EspColor = BrickColor.new("Bright blue")
+                EspPart = v
+            elseif v:IsA("Sound") and v.Name == "Fire" and string.find(tostring(v.SoundId), tostring(328964620)) then
+                types = "uzi"
+                EspText = "Uzi"
+                EspFontSize = "Size18"
+                EspColor = BrickColor.new("Bright blue")
+                EspPart = v:FindFirstAncestorWhichIsA("BasePart")
+            elseif v:IsA("Sound") and v.Name == "Fire" and string.find(tostring(v.SoundId), tostring(142383762)) then
+                types = "shotty"
+                EspText = "Shotty"
+                EspColor = BrickColor.new("Bright blue")
+                EspPart = v:FindFirstAncestorWhichIsA("BasePart")
+            end
+        end
+    
+    
+        local TracerPart = Instance.new("Part")
+        TracerPart.Parent = EspPart
+        TracerPart.Name = "TracerPart"
+        TracerPart.CFrame = EspPart.CFrame
+        TracerPart.Size = Vector3.new(0.2,0.2,0.2)
+        TracerPart.Anchored = true
+        TracerPart.Transparency = 1
+    
+        local billgui = Instance.new('BillboardGui', TracerPart)
+        local textlab = Instance.new('TextLabel', billgui)
+    
+        billgui.Name = "ESPBillboard"
+        billgui.Adornee  = TracerPart
+        billgui.AlwaysOnTop = true
+        billgui.ExtentsOffset = Vector3.new(0, 1, 0)
+        billgui.Size = UDim2.new(0, 5, 0, 5)
+        
+        textlab.Name = "ESPLabel"
+        textlab.BackgroundColor3 = Color3.new(255, 255, 255)
+        textlab.BackgroundTransparency = 1
+        textlab.BorderSizePixel = 0
+        textlab.Position = UDim2.new(0, 0, 0, -40)
+        textlab.Size = UDim2.new(1, 0, 10, 0)
+        textlab.Visible = true
+        textlab.ZIndex = 10
+        textlab.Font = 'ArialBold'
+        textlab.FontSize = EspFontSize
+        textlab.Text = EspText
+        textlab.TextColor = EspColor
+        textlab.TextStrokeColor3 = Color3.fromRGB(0,0,0)
+        textlab.TextStrokeTransparency = 0.6
+    end
+    
+    for i,v in pairs(game.Workspace:GetChildren()) do
+        if v.Name == "RandomSpawner" then
+            esp(v)
+        end
+    end
+    
+    for i,v in pairs(game.Workspace:GetChildren()) do
+        if v.Name == "RandomSpawner" then
+            if v:FindFirstChild("Model") then
+                v.Model.ChildAdded:Connect(function(child)
+                    esp(child)
+                end)
+            end
+            v.ChildAdded:Connect(function(child)
+                esp(child)
+            end)
+        end
+    end
+    
+    game.Workspace.ChildAdded:Connect(function(child)
+        if child.Name == "RandomSpawner" then
+            repeat wait() until child.Model
+            esp(child)
+        end
+       end)
+end)
+----aidez itemesp (temp)
+
+Citizen:AddCommand("hatvis", "enables hat visualizer god-mode not required", function(args)
+  ---weird ass hat vis .mode 9 and hold out boombox for bbox vis this is rare so im leaking
+    local plr = game.Players.LocalPlayer;
+    local chr = plr.Character;
+    local hum = chr.Humanoid;
+    local mov = {};
+    local mov2 = {};
+    
+    --[[NetworkCR]]
+    coroutine.resume(coroutine.create(function()
+        settings().Physics.AllowSleep = false;
+        game.RunService.RenderStepped:Connect(function()
+            for i, v in pairs(game.Players:GetPlayers()) do
+                if v ~= plr then
+                    v.MaximumSimulationRadius = 0.1;
+                    v.SimulationRadius = 0;
+                else
+                    v.MaximumSimulationRadius = math.pow(math.huge, math.huge);
+                    v.SimulationRadius = math.pow(math.huge, 2);
+                end
+            end
+        end)
+    end))
+    
+    function ftp(str)
+        local pt = {};
+        if str ~= 'me' and str ~= 'random' then
+            for i, v in pairs(game.Players:GetPlayers()) do
+                if v.Name:lower():find(str:lower()) then
+                    table.insert(pt, v);
+                end
+            end
+        elseif str == 'me' then
+            table.insert(pt, plr);
+        elseif str == 'random' then
+            table.insert(pt, game.Players:GetPlayers()[math.random(1, #game.Players:GetPlayers())]);
+        end
+        return pt;
+    end
+    
+    for _, v in pairs(hum:GetAccessories()) do
+        local b = v.Handle;
+        b.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0);
+        b.CanCollide = false;
+        b:BreakJoints();
+        for _, k in pairs(v:GetChildren()) do
+            if not k:IsA'SpecialMesh' and not k:IsA'Part' then
+                k:Destroy();
+            end
+        end--niggabeans
+        local still = Instance.new('BodyAngularVelocity', b);
+        still.MaxTorque = Vector3.new(math.huge, math.huge, math.huge);
+        still.AngularVelocity = Vector3.new(0, 0, 0);
+        local align = Instance.new('AlignPosition', b);
+        align.MaxForce = 1000000;
+        align.MaxVelocity = math.huge;
+        align.RigidityEnabled = false;
+        align.ApplyAtCenterOfMass = true;
+        align.Responsiveness = 200;
+        local a0 = Instance.new('Attachment', b);
+        local a1 = Instance.new('Attachment', chr.HumanoidRootPart);
+        align.Attachment0 = a0;
+        align.Attachment1 = a1;
+        table.insert(mov, a1);
+        table.insert(mov2, still);
+    end
+    
+    local par = {};
+    for _, v in pairs(mov) do
+        local parr = Instance.new('Part', workspace);
+        parr.Anchored = true;
+        parr.Size = Vector3.new(1, 1, 1);
+        parr.Transparency = 1;
+        parr.CanCollide = false;
+        table.insert(par, parr);
+    end
+    
+    local rotx = 0;
+    local rotz = math.pi / 2;
+    local height = 0;
+    local heighti = 1;
+    local offset = 10;
+    local speed = 0.5;
+    local mode = 4;
+    local angular = Vector3.new(0, 0, 0);
+    local l = 1;
+    game['Run Service'].RenderStepped:Connect(function()
+        rotx = rotx + speed / 100;
+        rotz = rotz + speed / 100;
+        l = (l >= 360 and 1 or l + speed);
+        
+        for i, v in pairs(par) do
+            v.CFrame = CFrame.new(chr.HumanoidRootPart.Position) * CFrame.fromEulerAnglesXYZ(0, math.rad(l + (360 / #par) * i + speed), 0) * CFrame.new(offset, 0, 0);
+        end
+        
+        if heighti == 1 then
+            height = height + speed / 100;
+        elseif heighti == 2 then
+            height = height - speed / 100;
+        end
+        if height > 2 then
+            heighti = 2;
+        end
+        if height < -1 then
+            heighti = 1;
+        end
+        
+        if mode == 1 then
+            for _, v in pairs(mov) do
+                v.Position = Vector3.new(math.sin(rotx) * offset, 0, math.sin(rotz) * offset);
+            end
+        elseif mode == 2 then
+            for _, v in pairs(mov) do
+                v.Position = Vector3.new(offset, height, offset);
+            end
+        elseif mode == 3 then
+            for _, v in pairs(mov) do
+                v.Position = Vector3.new(math.sin(rotx) * offset, height, math.sin(rotz) * offset);
+            end
+        elseif mode == 4 then
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new(chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).X, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Y, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Z);
+            end
+        elseif mode == 5 then
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new((math.sin(rotx)) * offset, height, (math.cos(rotz) - i) * offset);
+            end
+        elseif mode == 6 then
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new((math.sin(rotx)) * offset, height, (math.tan(rotz) - i) * offset);
+            end
+        elseif mode == 7 then
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new(math.cos(rotx * i) * offset, 0, math.cos(rotz * i) * offset);
+            end
+        elseif mode == 8 then
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new(math.sin(rotx) * i * offset, 0, math.sin(rotz) * i * offset);
+            end
+        elseif mode == 9 then
+            pcall(function()
+                local so = nil;
+                for k, b in pairs(chr:GetChildren()) do
+                    if b:IsA'Tool' then
+                        for h, j in pairs(b:GetDescendants()) do
+                            if j:IsA'Sound' then
+                                so = j;
+                            end
+                        end
+                    end
+                end
+                if so ~= nil then
+                    offset = so.PlaybackLoudness / 35;
+                    speed = so.PlaybackLoudness / 500;
+                    angular = Vector3.new(0, so.PlaybackLoudness / 75, 0);
+                end
+            end)
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new(chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).X, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Y, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Z);
+            end
+        elseif mode == 10 then
+            offset = height * 15;
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new(chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).X, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Y, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Z);
+            end
+        elseif mode == 11 then
+            for i, v in pairs(mov) do
+                v.Position = Vector3.new(chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(plr:GetMouse().Hit.p)).X, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(plr:GetMouse().Hit.p)).Y, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(plr:GetMouse().Hit.p)).Z) + Vector3.new(chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).X, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Y, chr.HumanoidRootPart.CFrame:ToObjectSpace(CFrame.new(par[i].Position)).Z);
+            end
+        end
+        for _, v in pairs(mov2) do
+            v.AngularVelocity = angular;
+        end
+    end)
+    game.Players.LocalPlayer.Chatted:Connect(function(c)
+        if c:split(' ')[1] == '.orbit' then
+            for _, v in pairs(mov) do
+                chr = ftp(c:split(' ')[2])[1].Character;
+                v.Parent = ftp(c:split(' ')[2])[1].Character.HumanoidRootPart;
+            end
+        end
+        if c:split(' ')[1] == '.speed' then
+            speed = tonumber(c:split(' ')[2]);
+        end
+        if c:split(' ')[1] == '.mode' then
+            mode = tonumber(c:split(' ')[2]);
+        end
+        if c:split(' ')[1] == '.offset' then
+            offset = tonumber(c:split(' ')[2]);
+        end
+        if c:split(' ')[1] == '.angular' then
+            angular = Vector3.new(tonumber(c:split(' ')[2]), tonumber(c:split(' ')[3]), tonumber(c:split(' ')[4]));
+        end
+    end) 
+end)
+
+Citizen:AddCommand("rec", "receive stored tools", function(args) 
+    for _,v in pairs(game.Players.LocalPlayer:GetChildren()) do
+if (v:IsA("Tool")) then
+v.Parent = game.Players.LocalPlayer.Backpack
+end
+end
+end) --puts tools in storage basically duping, cannot use duped tools
+
+Citizen:AddCommand("save", "puts tools in storage", function(args)
+    for _,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if (v:IsA("Tool")) then
+v.Parent = game.Players.LocalPlayer
+end
+end
+end) --receives tools in storage basically duping, cannot use duped tools
+
+Citizen:AddCommand("antilog", "injects dot mp4 anti logger", function(args)
+	loadstring(game:HttpGet(('https://pastebin.com/raw/DsJ170Bz'),true))()
+end) --audio protection i reccomend to use if u dont wanna get logged lol.
+
+Citizen:AddCommand("rejoin", "Rejoins the game that you're in.", function()
+	local ts = game:GetService("TeleportService")
+	local p = game:GetService("Players").LocalPlayer
+	ts:Teleport(game.PlaceId, p)
+end)
+
+---creds to whoever i fixed this a lil bit ^^
+local chatFrame = game:GetService("Players").LocalPlayer.PlayerGui.Chat.Frame
+chatFrame.ChatChannelParentFrame.Visible=true
+chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
+
+Citizen:AddCommand("as", "autoshoots plr", function(args)
+    local plr = psearch(args[1])
+    if game.Players.LocalPlayer.Character:findFirstChildOfClass("Tool") then
+    local tool = game.Players.LocalPlayer.Character:findFirstChildOfClass("Tool")
+    if tool:findFirstChild("Fire") then
+    repeat
+    tool.Fire:FireServer(plr.Character.Torso.CFrame + plr.Character.HumanoidRootPart.Velocity/10)
+    wait()
+    until plr.Character:findFirstChild("KO") or plr.Character.Humanoid.Health == 0
+    
+    if plr.Character:findFirstChild("KO") or plr.Character.Humanoid.Health == 0 then
+    plr = false
+    end
+    end
+    end
+end)
